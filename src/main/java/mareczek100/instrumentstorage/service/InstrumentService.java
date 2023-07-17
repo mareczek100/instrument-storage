@@ -7,36 +7,52 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class InstrumentService {
 
     private final InstrumentRepository instrumentRepository;
-
     @Transactional
     public InstrumentEntity insertNewInstrument(InstrumentEntity instrumentEntity) {
         return instrumentRepository.insertInstrument(instrumentEntity);
     }
     @Transactional
-    public List<InstrumentEntity> insertInstrumentList(List<InstrumentEntity> instrumentEntities) {
-        return instrumentRepository.insertInstrumentList(instrumentEntities);
+    public InstrumentEntity updateInstrument(InstrumentEntity instrumentEntityWithId) {
+        return instrumentRepository.updateInstrument(instrumentEntityWithId);
     }
     @Transactional
-    public Optional<InstrumentEntity> findInstrumentById(Integer instrumentEntityId) {
-        return instrumentRepository.findInstrumentById(instrumentEntityId);
+    public InstrumentEntity findInstrumentById(Integer instrumentEntityId) {
+        return instrumentRepository.findInstrumentById(instrumentEntityId).orElseThrow(
+                () -> new RuntimeException("Instrument with id number [%s] doesn't exist!"
+                        .formatted(instrumentEntityId))
+        );
     }
     @Transactional
-    public Optional<InstrumentEntity> findInstrumentByName(String instrumentEntityName) {
-        return instrumentRepository.findInstrumentByName(instrumentEntityName);
+    public InstrumentEntity findInstrumentByName(String instrumentEntityName) {
+        return instrumentRepository.findInstrumentByName(instrumentEntityName).orElseThrow(
+                () -> new RuntimeException("Instrument [%s] doesn't exist in our storage, sorry!"
+                        .formatted(instrumentEntityName)));
     }
     @Transactional
     public List<InstrumentEntity> findInstrumentByCategory(String instrumentEntityCategory) {
-        return instrumentRepository.findInstrumentByCategory(instrumentEntityCategory);
+        List<InstrumentEntity> instrumentByCategory = instrumentRepository.findInstrumentByCategoryName(instrumentEntityCategory);
+        if (instrumentByCategory.isEmpty()){
+            throw new RuntimeException("We have no instruments in category [%s], sorry!"
+                    .formatted(instrumentEntityCategory));
+        }
+        return instrumentByCategory;
     }
     @Transactional
     public List<InstrumentEntity> findAllInstruments() {
-        return instrumentRepository.findAllInstruments();
+        List<InstrumentEntity> allInstruments = instrumentRepository.findAllInstruments();
+        if (allInstruments.isEmpty()){
+            throw new RuntimeException("We have no instruments at all - our storage is empty. Sorry!");
+        }
+        return allInstruments;
+    }
+    @Transactional
+    public void deleteInstrumentByName(String instrumentEntityName){
+        instrumentRepository.deleteInstrumentByName(findInstrumentByName(instrumentEntityName));
     }
 }

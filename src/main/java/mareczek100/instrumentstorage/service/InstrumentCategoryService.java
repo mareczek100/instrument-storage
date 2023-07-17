@@ -7,32 +7,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class InstrumentCategoryService {
 
     private final InstrumentCategoryRepository instrumentCategoryRepository;
-
     @Transactional
-    public InstrumentCategoryEntity insertNewInstrumentCategory(InstrumentCategoryEntity instrumentCategoryEntity) {
-        return instrumentCategoryRepository.insertInstrumentCategory(instrumentCategoryEntity);
+    public List<InstrumentCategoryEntity> findAllInstrumentCategories() {
+        List<InstrumentCategoryEntity> allInstrumentCategories = instrumentCategoryRepository.findAllCategories();
+        if (allInstrumentCategories.isEmpty()){
+            throw new RuntimeException("We have no instrument categories right now. Sorry!");
+        }
+        return allInstrumentCategories;
     }
     @Transactional
-    public InstrumentCategoryEntity updateInstrumentCategory(InstrumentCategoryEntity instrumentCategoryEntityWithId) {
-        return instrumentCategoryRepository.updateInstrumentCategory(instrumentCategoryEntityWithId);
+    public InstrumentCategoryEntity findInstrumentCategoryById(Short instrumentCategoryEntityId){
+        return instrumentCategoryRepository.findCategoryById(instrumentCategoryEntityId).orElseThrow(
+                () -> new RuntimeException("Instrument category with id number [%s] doesn't exist!"
+                        .formatted(instrumentCategoryEntityId))
+        );
     }
     @Transactional
-    public List<InstrumentCategoryEntity> findAllCategories() {
-        return instrumentCategoryRepository.findAllCategories();
-    }
-    @Transactional
-    public Optional<InstrumentCategoryEntity> findCategoryById(Short instrumentCategoryEntityId){
-        return instrumentCategoryRepository.findCategoryById(instrumentCategoryEntityId);
-    }
-    @Transactional
-    public Optional<InstrumentCategoryEntity> findCategoryByName(String instrumentCategoryEntityName) {
-        return instrumentCategoryRepository.findCategoryByName(instrumentCategoryEntityName);
+    public InstrumentCategoryEntity findInstrumentCategoryByName(String instrumentCategoryEntityName) {
+        return instrumentCategoryRepository.findCategoryByName(instrumentCategoryEntityName).orElseThrow(
+                () -> new RuntimeException("Instrument category [%s] doesn't exist, sorry!"
+                        .formatted(instrumentCategoryEntityName)));
     }
 }
