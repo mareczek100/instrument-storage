@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/**")
+@RequestMapping("/")
 public class ErrorRestController implements ErrorController {
     public static final String ERROR = "/error";
 
@@ -19,7 +19,14 @@ public class ErrorRestController implements ErrorController {
     @GetMapping
     public ResponseEntity<String> error() {
         return new ResponseEntity<>
-                ("This endpoint doesn't exist. Go to: server:port/instrument-storage/swagger-ui/index.htm",
+                ("This endpoint is empty. Go to: server:port/instrument-storage/swagger-ui/index.html",
+                        HttpStatus.BAD_REQUEST);
+    }
+    @Operation(summary = "Error message in bad endpoint case.")
+    @GetMapping(ERROR)
+    public ResponseEntity<String> errorEndpoint() {
+        return new ResponseEntity<>
+                ("This endpoint doesn't exist. To find api contract go to: server:port/instrument-storage/swagger-ui/index.html",
                         HttpStatus.BAD_REQUEST);
     }
 }

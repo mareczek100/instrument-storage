@@ -1,6 +1,7 @@
 package mareczek100.instrumentstorage.service;
 
 import lombok.RequiredArgsConstructor;
+import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentCategoryEntity;
 import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentEntity;
 import mareczek100.instrumentstorage.infrastructure.database.repository.InstrumentRepository;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,17 @@ import java.util.List;
 public class InstrumentService {
 
     private final InstrumentRepository instrumentRepository;
+    private final InstrumentCategoryService instrumentCategoryService;
     @Transactional
     public InstrumentEntity insertNewInstrument(InstrumentEntity instrumentEntity) {
-        return instrumentRepository.insertInstrument(instrumentEntity);
+        if (findAllInstruments().contains(instrumentEntity)){
+            throw new RuntimeException("Instrument [%s] already exist in our storage! Add instrument with other name."
+                    .formatted(instrumentEntity.getName()));
+        }
+        InstrumentCategoryEntity instrumentCategory =
+                instrumentCategoryService.findInstrumentCategoryByName(instrumentEntity.getCategory().getCategoryName().name());
+
+        return instrumentRepository.insertInstrument(instrumentEntity.withCategory(instrumentCategory));
     }
     @Transactional
     public InstrumentEntity updateInstrument(InstrumentEntity instrumentEntityWithId) {

@@ -44,7 +44,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository{
             throw new RuntimeException(("Category [%s] doesn't exist!%nAvailable categories: %s")
                     .formatted(instrumentEntityCategory, categoryNames));
         }
-        return instrumentJpaRepository.findInstrumentByCategory(instrumentEntityCategory);
+        return instrumentJpaRepository.findInstrumentByCategory(
+                InstrumentCategoryName.valueOf(instrumentEntityCategory));
     }
     public List<InstrumentEntity> findAllInstruments() {
         return instrumentJpaRepository.findAll();

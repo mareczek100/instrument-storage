@@ -2,6 +2,7 @@ package mareczek100.instrumentstorage.infrastructure.database.repository;
 
 import lombok.RequiredArgsConstructor;
 import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentCategoryEntity;
+import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentCategoryName;
 import mareczek100.instrumentstorage.infrastructure.database.repository.jpa.InstrumentCategoryJpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +22,7 @@ public class InstrumentCategoryRepositoryImpl implements InstrumentCategoryRepos
         return instrumentCategoryJpaRepository.findById(instrumentCategoryEntityId);
     }
     public Optional<InstrumentCategoryEntity> findCategoryByName(String instrumentCategoryEntityName){
-        return instrumentCategoryJpaRepository.findInstrumentCategoryByCategoryName(instrumentCategoryEntityName);
+        return instrumentCategoryJpaRepository.findInstrumentCategoryByCategoryName(
+                InstrumentCategoryName.valueOf(instrumentCategoryEntityName));
     }
 }

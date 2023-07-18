@@ -1,12 +1,12 @@
 CREATE TABLE instrument_category (
-    instrument_category_id     SMALLINT  NOT NULL,
-    category_name              VARCHAR(10)  NOT NULL,
+    instrument_category_id     SMALLINT     NOT NULL,
+    category_name              VARCHAR(20)  NOT NULL,
     PRIMARY KEY (instrument_category_id),
     UNIQUE (category_name)
 );
 CREATE TABLE instrument (
     instrument_id           SERIAL       NOT NULL,
-    name                    VARCHAR(20)  NOT NULL,
+    name                    VARCHAR(40)  NOT NULL,
     category_id             SMALLINT     NOT NULL,
     primary_school_degree   BOOLEAN      NOT NULL,
     secondary_school_degree BOOLEAN      NOT NULL,

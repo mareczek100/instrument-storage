@@ -12,6 +12,8 @@ public class InstrumentEntityDtoMapper {
     public InstrumentEntity mapToEntityFromDto(InstrumentDto instrumentDto) {
         return InstrumentEntity.builder()
                 .name(instrumentDto.name())
+                .primarySchoolDegree(instrumentDto.primarySchoolDegree())
+                .secondarySchoolDegree(instrumentDto.secondarySchoolDegree())
                 .category(buildInstrumentCategoryEntity(instrumentDto.category()))
                 .build();
     }
@@ -25,6 +27,8 @@ public class InstrumentEntityDtoMapper {
     public InstrumentDto mapToDtoFromEntity(InstrumentEntity instrumentEntity) {
         return InstrumentDto.builder()
                 .name(instrumentEntity.getName())
+                .primarySchoolDegree(instrumentEntity.getPrimarySchoolDegree())
+                .secondarySchoolDegree(instrumentEntity.getSecondarySchoolDegree())
                 .category(buildInstrumentCategoryDto(instrumentEntity.getCategory()))
                 .build();
     }

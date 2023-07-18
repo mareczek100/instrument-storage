@@ -6,6 +6,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 @Data
+@With
 @Entity
 @Builder
 @AllArgsConstructor
@@ -21,6 +22,12 @@ public class InstrumentEntity {
 
     @Column(name = "name", unique = true)
     private String name;
+
+    @Column(name = "primary_school_degree")
+    private Boolean primarySchoolDegree;
+
+    @Column(name = "secondary_school_degree")
+    private Boolean secondarySchoolDegree;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.*;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -27,6 +28,8 @@ public class ExceptionRestControllerHandler extends ResponseEntityExceptionHandl
     private static final Map<Class<? extends Exception>, HttpStatus> EXCEPTION_STATUS = Map.of(
             ConstraintViolationException.class, HttpStatus.BAD_REQUEST,
             DataIntegrityViolationException.class, HttpStatus.BAD_REQUEST,
+            InvalidDataAccessApiUsageException.class, HttpStatus.BAD_REQUEST,
+            RuntimeException.class, HttpStatus.BAD_REQUEST,
             EntityNotFoundException.class, HttpStatus.NOT_FOUND,
             NotFoundException.class, HttpStatus.NOT_FOUND
     );
@@ -44,18 +47,18 @@ public class ExceptionRestControllerHandler extends ResponseEntityExceptionHandl
                 httpHeaders, httpStatusCode, webRequest);
     }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleException(final Exception ex) {
+    public ResponseEntity<?> handleException(final Exception ex) {
         return doHandle(ex, getHttpStatusFromException(ex.getClass()));
     }
 
-    private ResponseEntity<Object> doHandle(final Exception ex, final HttpStatus httpStatus){
+    private ResponseEntity<?> doHandle(final Exception ex, final HttpStatus httpStatus){
         final String errorId = UUID.randomUUID().toString();
         log.error("Exception: ID={}, HttpStatus={}", errorId, httpStatus, ex);
 
         return ResponseEntity
                 .status(httpStatus)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(ExceptionMessage.builder().errorId(errorId).build());
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(ex.getMessage());
     }
 
     private HttpStatus getHttpStatusFromException(Class<? extends Exception> exceptionClass) {

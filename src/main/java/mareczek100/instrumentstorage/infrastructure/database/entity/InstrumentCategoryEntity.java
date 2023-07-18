@@ -21,7 +21,7 @@ public class InstrumentCategoryEntity {
     private Short instrumentCategoryId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "category_name", columnDefinition = "enum('strunowe','dęte','perkusyjne')", unique = true)
+    @Column(name = "category_name", unique = true)
     private InstrumentCategoryName categoryName;
 
     @OneToMany(mappedBy = "category")

@@ -1,5 +1,6 @@
 package mareczek100.instrumentstorage.infrastructure.database.repository.jpa;
 
+import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentCategoryName;
 import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +16,5 @@ public interface InstrumentJpaRepository extends JpaRepository<InstrumentEntity,
             JOIN FETCH ins.category cat
             WHERE cat.categoryName = :category
             """)
-    List<InstrumentEntity> findInstrumentByCategory(@Param("category") String category);
+    List<InstrumentEntity> findInstrumentByCategory(@Param("category") InstrumentCategoryName category);
 }
