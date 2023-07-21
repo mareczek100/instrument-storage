@@ -14,7 +14,7 @@ public interface InstrumentRepository {
 
     Optional<InstrumentEntity> findInstrumentByName(String instrumentEntityName);
 
-    List<InstrumentEntity> findInstrumentByCategoryName(String instrumentEntityCategory);
+    List<InstrumentEntity> findInstrumentsByCategoryName(String instrumentEntityCategory);
 
     List<InstrumentEntity> findAllInstruments();
 

@@ -4,14 +4,15 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import mareczek100.instrumentstorage.api.dto.InstrumentDto;
 import mareczek100.instrumentstorage.api.dto.InstrumentsDto;
 import mareczek100.instrumentstorage.infrastructure.database.entity.InstrumentEntity;
 import mareczek100.instrumentstorage.infrastructure.database.entityDtoMapper.InstrumentEntityDtoMapper;
 import mareczek100.instrumentstorage.service.InstrumentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +24,7 @@ public class InstrumentRestController {
     public static final String UPDATE_INSTRUMENT = "/update";
     public static final String FIND_INSTRUMENT_BY_ID = "/{instrumentId}/id";
     public static final String FIND_INSTRUMENT_BY_NAME = "/{instrumentName}/name";
-    public static final String FIND_INSTRUMENT_BY_CATEGORY = "/{instrumentCategory}/category";
+    public static final String FIND_INSTRUMENTS_BY_CATEGORY = "/{instrumentCategory}/category";
     public static final String DELETE_INSTRUMENT_BY_NAME = "/delete";
 
     private final InstrumentService instrumentService;
@@ -40,15 +41,16 @@ public class InstrumentRestController {
                 .build();
     }
 
-    @ApiResponses(@ApiResponse(code = 200, message = "Added new instrument to Instrument storage!"))
+    @ApiResponses(@ApiResponse(code = 201, message = "Added new instrument to Instrument storage!"))
     @Operation(summary = "Add new instrument to Instrument storage.")
     @PostMapping(path = ADD_INSTRUMENT)
-    public InstrumentDto addInstrumentToExistingInstrumentList(
+    public ResponseEntity<InstrumentDto> addInstrumentToExistingInstrumentList(
             @Valid @RequestBody InstrumentDto instrumentDto) {
 
         InstrumentEntity instrumentEntity = instrumentEntityDtoMapper.mapToEntityFromDto(instrumentDto);
         InstrumentEntity insertedNewInstrument = instrumentService.insertNewInstrument(instrumentEntity);
-        return instrumentEntityDtoMapper.mapToDtoFromEntity(insertedNewInstrument);
+        InstrumentDto insertedNewInstrumentDto = instrumentEntityDtoMapper.mapToDtoFromEntity(insertedNewInstrument);
+        return ResponseEntity.status(HttpStatus.CREATED).body(insertedNewInstrumentDto);
     }
 
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument updated!"))
@@ -75,7 +77,7 @@ public class InstrumentRestController {
     @Operation(summary = "Find instrument by instrument id number. Id is an integer between 1 and size of all instrument list.")
     @GetMapping(FIND_INSTRUMENT_BY_ID)
     public InstrumentDto findInstrumentById(
-            @PathParam("instrumentId") Integer instrumentId) {
+            @PathVariable("instrumentId") Integer instrumentId) {
 
         InstrumentEntity instrumentEntity = instrumentService.findInstrumentById(instrumentId);
         return instrumentEntityDtoMapper.mapToDtoFromEntity(instrumentEntity);
@@ -85,19 +87,19 @@ public class InstrumentRestController {
     @Operation(summary = "Find instrument by instrument name. To list all instruments use allInstrumentList() method.")
     @GetMapping(FIND_INSTRUMENT_BY_NAME)
     public InstrumentDto findInstrumentByName(
-            @PathParam("instrumentName") String instrumentName) {
+            @PathVariable("instrumentName") String instrumentName) {
 
         InstrumentEntity instrumentEntity = instrumentService.findInstrumentByName(instrumentName);
         return instrumentEntityDtoMapper.mapToDtoFromEntity(instrumentEntity);
     }
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument storage found instrument by category!"))
     @Operation(summary = "List all instruments by category: \"strunowe\", \"dęte\" (with polish diacritical marks) or \"perkusyjne\".")
-    @GetMapping(FIND_INSTRUMENT_BY_CATEGORY)
+    @GetMapping(FIND_INSTRUMENTS_BY_CATEGORY)
     public InstrumentsDto findInstrumentByCategory(
-            @PathParam("instrumentCategory") String instrumentCategory) {
+            @PathVariable("instrumentCategory") String instrumentCategory) {
 
         return InstrumentsDto.builder().instrumentDtoList(
-                        instrumentService.findInstrumentByCategory(instrumentCategory).stream()
+                        instrumentService.findInstrumentsByCategory(instrumentCategory).stream()
                                 .map(instrumentEntityDtoMapper::mapToDtoFromEntity)
                                 .toList())
                 .build();

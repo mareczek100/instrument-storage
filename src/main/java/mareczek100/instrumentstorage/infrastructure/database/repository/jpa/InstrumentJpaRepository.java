@@ -16,5 +16,5 @@ public interface InstrumentJpaRepository extends JpaRepository<InstrumentEntity,
             JOIN FETCH ins.category cat
             WHERE cat.categoryName = :category
             """)
-    List<InstrumentEntity> findInstrumentByCategory(@Param("category") InstrumentCategoryName category);
+    List<InstrumentEntity> findInstrumentsByCategory(@Param("category") InstrumentCategoryName category);
 }

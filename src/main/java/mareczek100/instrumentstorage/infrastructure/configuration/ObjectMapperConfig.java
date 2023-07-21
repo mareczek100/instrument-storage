@@ -19,7 +19,9 @@ public class ObjectMapperConfig {
                 .registerModule(new JavaTimeModule())
                 .registerModule(new Jdk8Module())
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 }

@@ -44,8 +44,8 @@ public class InstrumentService {
                         .formatted(instrumentEntityName)));
     }
     @Transactional
-    public List<InstrumentEntity> findInstrumentByCategory(String instrumentEntityCategory) {
-        List<InstrumentEntity> instrumentByCategory = instrumentRepository.findInstrumentByCategoryName(instrumentEntityCategory);
+    public List<InstrumentEntity> findInstrumentsByCategory(String instrumentEntityCategory) {
+        List<InstrumentEntity> instrumentByCategory = instrumentRepository.findInstrumentsByCategoryName(instrumentEntityCategory);
         if (instrumentByCategory.isEmpty()){
             throw new RuntimeException("We have no instruments in category [%s], sorry!"
                     .formatted(instrumentEntityCategory));

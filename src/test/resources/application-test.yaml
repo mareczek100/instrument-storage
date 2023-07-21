@@ -1,0 +1,6 @@
+server:
+  servlet:
+    context-path: /instrument-storage
+  jpa:
+    hibernate:
+      ddl-auto: validate

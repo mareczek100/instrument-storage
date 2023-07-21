@@ -17,6 +17,9 @@ public class InstrumentRepositoryImpl implements InstrumentRepository{
     private final InstrumentJpaRepository instrumentJpaRepository;
 
     public InstrumentEntity insertInstrument(InstrumentEntity instrumentEntity) {
+        if (instrumentEntity.getName().length() > 40){
+            throw new RuntimeException("Instrument name too long, max length is 40 characters!");
+        }
         return instrumentJpaRepository.saveAndFlush(instrumentEntity);
     }
 
@@ -33,7 +36,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository{
         return instrumentJpaRepository.findInstrumentByName(instrumentEntityName);
     }
 
-    public List<InstrumentEntity> findInstrumentByCategoryName(String instrumentEntityCategory) {
+    public List<InstrumentEntity> findInstrumentsByCategoryName(String instrumentEntityCategory) {
         List<String> categoryNames = Arrays.stream(InstrumentCategoryName.values())
                 .map(Enum::name)
                 .toList();
@@ -44,7 +47,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository{
             throw new RuntimeException(("Category [%s] doesn't exist!%nAvailable categories: %s")
                     .formatted(instrumentEntityCategory, categoryNames));
         }
-        return instrumentJpaRepository.findInstrumentByCategory(
+        return instrumentJpaRepository.findInstrumentsByCategory(
                 InstrumentCategoryName.valueOf(instrumentEntityCategory));
     }
     public List<InstrumentEntity> findAllInstruments() {

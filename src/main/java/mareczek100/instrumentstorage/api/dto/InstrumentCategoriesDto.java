@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record InstrumentCategoriesDto(List<String> instrumentCategoryDtoList) {
+public record InstrumentCategoriesDto(List<InstrumentCategoryDto> instrumentCategoryDtoList) {
 }

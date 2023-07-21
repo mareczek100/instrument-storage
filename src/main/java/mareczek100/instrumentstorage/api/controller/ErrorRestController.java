@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/")
+@RequestMapping(ErrorRestController.HOME)
 public class ErrorRestController implements ErrorController {
     public static final String ERROR = "/error";
+    public static final String HOME = "/";
 
     @Operation(summary = "Error message in bad endpoint case.")
     @GetMapping

@@ -6,11 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InstrumentCategoryEntityDtoMapper {
-    public InstrumentCategoryEntity mapToEntityFromDto (InstrumentCategoryDto instrumentCategoryDto) {
-        return InstrumentCategoryEntity.builder()
-                .categoryName(instrumentCategoryDto.category())
-                .build();
-    }
     public InstrumentCategoryDto mapToDtoFromEntity (InstrumentCategoryEntity instrumentCategoryEntity) {
         return InstrumentCategoryDto.builder()
                 .category(instrumentCategoryEntity.getCategoryName())
