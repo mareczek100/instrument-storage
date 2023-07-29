@@ -1,5 +1,6 @@
 insert into INSTRUMENT (name, category_id, primary_school_degree, secondary_school_degree)
 values
+('strunowe', 1, true, true),
 ('skrzypce', 1, true, true),
 ('altówka', 1, false, true),
 ('wiolonczela', 1, true, true),
@@ -10,6 +11,7 @@ values
 ('klawesyn', 1, false, true),
 ('fortepian', 1, true, true),
 ('cymbały', 1, false, true),
+('dęte', 2, true, true),
 ('flet', 2, true, true),
 ('obój', 2, false, true),
 ('rożek_angielski', 2, false, true),
@@ -23,6 +25,7 @@ values
 ('tuba', 2, false, true),
 ('organy', 2, false, true),
 ('akordeon', 2, true, true),
+('perkusyjne', 3, true, true),
 ('perkusja', 3, true, true),
 ('kotły', 3, false, true),
 ('bębny', 3, false, true),

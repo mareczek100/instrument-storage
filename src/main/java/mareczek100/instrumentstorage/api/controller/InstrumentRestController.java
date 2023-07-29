@@ -95,7 +95,7 @@ public class InstrumentRestController {
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument storage found instrument by category!"))
     @Operation(summary = "List all instruments by category: \"strunowe\", \"dęte\" (with polish diacritical marks) or \"perkusyjne\".")
     @GetMapping(FIND_INSTRUMENTS_BY_CATEGORY)
-    public InstrumentsDto findInstrumentByCategory(
+    public InstrumentsDto findInstrumentsByCategory(
             @PathVariable("instrumentCategory") String instrumentCategory) {
 
         return InstrumentsDto.builder().instrumentDtoList(
