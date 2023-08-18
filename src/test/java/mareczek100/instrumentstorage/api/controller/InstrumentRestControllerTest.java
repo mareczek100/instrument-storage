@@ -163,7 +163,8 @@ class InstrumentRestControllerTest {
 
         //then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
-                                InstrumentRestController.API_INSTRUMENT + InstrumentRestController.FIND_INSTRUMENT_BY_ID, instrumentId)
+                                InstrumentRestController.API_INSTRUMENT + InstrumentRestController.FIND_INSTRUMENT_BY_ID,
+                                instrumentId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -187,7 +188,8 @@ class InstrumentRestControllerTest {
 
         //then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
-                                InstrumentRestController.API_INSTRUMENT + InstrumentRestController.FIND_INSTRUMENT_BY_NAME, instrumentName)
+                                InstrumentRestController.API_INSTRUMENT + InstrumentRestController.FIND_INSTRUMENT_BY_NAME,
+                                instrumentName)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -41,7 +41,7 @@ public class InstrumentRestController {
                 .build();
     }
 
-    @ApiResponses(@ApiResponse(code = 201, message = "Added new instrument to Instrument storage!"))
+    @ApiResponses(@ApiResponse(code = 201, message = "New instrument added to Instrument Storage!"))
     @Operation(summary = "Add new instrument to Instrument storage.")
     @PostMapping(path = ADD_INSTRUMENT)
     public ResponseEntity<InstrumentDto> addInstrumentToExistingInstrumentList(

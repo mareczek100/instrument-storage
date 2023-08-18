@@ -9,9 +9,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
-
-@TestConfiguration
 @Testcontainers
+@TestConfiguration
 public class PersistenceTestConfig {
 
     private static final String USERNAME = "test";

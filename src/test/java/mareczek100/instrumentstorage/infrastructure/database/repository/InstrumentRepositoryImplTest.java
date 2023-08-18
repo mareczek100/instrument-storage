@@ -14,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(PersistenceTestConfig.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -76,7 +78,6 @@ class InstrumentRepositoryImplTest {
         Assertions.assertTrue(instrumentEntitiesAfterAdd.size() >= 1);
         Assertions.assertNotEquals(instrumentEntitiesBeforeAdd, instrumentEntitiesAfterAdd);
         Assertions.assertEquals(instrumentEntitiesBeforeAdd.size(), instrumentEntitiesAfterAdd.size() - 1);
-
     }
 
     @Test
@@ -100,7 +101,6 @@ class InstrumentRepositoryImplTest {
         InstrumentEntity instrumentEntity = InputEntityTestData.instrumentEntity1();
         InstrumentEntity instrumentEntityFromStorage = instrumentJpaRepository.findAll().stream()
                 .findAny().orElse(instrumentEntity);
-        String instrumentName = "instrumentName";
 
         //when
         Optional<InstrumentEntity> instrumentByName = instrumentJpaRepository.findInstrumentByName(
@@ -109,7 +109,6 @@ class InstrumentRepositoryImplTest {
         //then
         Assertions.assertTrue(instrumentByName.isPresent());
         Assertions.assertEquals(instrumentEntityFromStorage, instrumentByName.get());
-
     }
 
     @Test
@@ -129,7 +128,6 @@ class InstrumentRepositoryImplTest {
         Assertions.assertTrue(instrumentsByCategory.size() >= 1);
         Assertions.assertEquals(instrumentsByCategory.get(0).getCategory().getCategoryName(),
                 instrumentEntityCategoryNameStrunowe);
-
     }
 
 
@@ -147,6 +145,5 @@ class InstrumentRepositoryImplTest {
         //then
         Assertions.assertNotEquals(instrumentEntitiesBeforeDelete, instrumentEntitiesAfterDelete);
         Assertions.assertEquals(instrumentEntitiesBeforeDelete.size() - 1, instrumentEntitiesAfterDelete.size());
-
     }
 }
