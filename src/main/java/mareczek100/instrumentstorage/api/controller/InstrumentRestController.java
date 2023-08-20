@@ -56,7 +56,7 @@ public class InstrumentRestController {
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument updated!"))
     @Operation(summary = "Update instrument by put old and new-updated name. Use polish diacritical marks if necessary.")
     @PatchMapping(UPDATE_INSTRUMENT)
-    public InstrumentDto updateExistingInstrumentByName(
+    public InstrumentDto updateExistingInstrumentByPutNewInstrumentName(
             @RequestParam(name = "oldInstrumentName") String oldInstrumentName,
             @RequestParam(name = "newInstrumentName") String newInstrumentName) {
 
@@ -84,7 +84,7 @@ public class InstrumentRestController {
     }
 
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument storage found instrument by name!"))
-    @Operation(summary = "Find instrument by instrument name. To list all instruments use allInstrumentList() method.")
+    @Operation(summary = "Find instrument by instrument name. To list all instruments check 'allInstrumentList' method.")
     @GetMapping(FIND_INSTRUMENT_BY_NAME)
     public InstrumentDto findInstrumentByName(
             @PathVariable("instrumentName") String instrumentName) {
@@ -105,7 +105,7 @@ public class InstrumentRestController {
                 .build();
     }
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument deleted!"))
-    @Operation(summary = "Delete instrument from our storage by instrument name.")
+    @Operation(summary = "Delete instrument from our storage - by provide instrument name.")
     @DeleteMapping(DELETE_INSTRUMENT_BY_NAME)
     public void deleteInstrumentByName(
             @RequestParam("instrumentName") String instrumentName) {

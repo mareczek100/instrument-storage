@@ -9,11 +9,14 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +34,7 @@ class InstrumentCategoryServiceTest {
     }
 
     @Test
-    void findAllInstrumentCategories() {
+    void findAllInstrumentCategoriesWorksCorrectly() {
         //given
         List<InstrumentCategoryEntity> instrumentCategoryEntityList = InputEntityTestData.instrumentCategoryEntityList();
         InstrumentCategoryEntity instrumentCategoryEntity = instrumentCategoryEntityList.stream().findAny().orElse(null);
@@ -45,9 +48,22 @@ class InstrumentCategoryServiceTest {
         Assertions.assertThatCollection(allInstrumentCategories).hasSize(size);
         Assertions.assertThatCollection(allInstrumentCategories).contains(instrumentCategoryEntity);
     }
+    @Test
+    void findAllInstrumentCategoriesThrowsExceptionIfCategoriesDoesNotExists() {
+        //given
+        String exceptionMessage = "We have no instrument categories right now. Sorry!";
+
+        //when
+        Mockito.when(instrumentCategoryRepository.findAllCategories()).thenReturn(Collections.emptyList());
+        Executable exception = () ->  instrumentCategoryService.findAllInstrumentCategories();
+
+        //then
+        org.junit.jupiter.api.Assertions.assertThrowsExactly(
+                RuntimeException.class, exception, exceptionMessage);
+    }
 
     @Test
-    void findInstrumentCategoryById() {
+    void findInstrumentCategoryByIdWorksCorrectly() {
         //given
         Short instrumentCategoryId1 = 1;
         Short instrumentCategoryId2 = 2;
@@ -63,18 +79,38 @@ class InstrumentCategoryServiceTest {
                 .thenReturn(Optional.of(instrumentCategoryEntity2));
         Mockito.when(instrumentCategoryRepository.findCategoryById(instrumentCategoryId3))
                 .thenReturn(Optional.of(instrumentCategoryEntity3));
-        InstrumentCategoryEntity instrumentCategoryFoundById1 = instrumentCategoryService.findInstrumentCategoryById(instrumentCategoryId1);
-        InstrumentCategoryEntity instrumentCategoryFoundById2 = instrumentCategoryService.findInstrumentCategoryById(instrumentCategoryId2);
-        InstrumentCategoryEntity instrumentCategoryFoundById3 = instrumentCategoryService.findInstrumentCategoryById(instrumentCategoryId3);
+        InstrumentCategoryEntity instrumentCategoryFoundById1
+                = instrumentCategoryService.findInstrumentCategoryById(instrumentCategoryId1);
+        InstrumentCategoryEntity instrumentCategoryFoundById2
+                = instrumentCategoryService.findInstrumentCategoryById(instrumentCategoryId2);
+        InstrumentCategoryEntity instrumentCategoryFoundById3
+                = instrumentCategoryService.findInstrumentCategoryById(instrumentCategoryId3);
 
         //then
         Assertions.assertThat(instrumentCategoryFoundById1).isEqualTo(instrumentCategoryEntity1);
         Assertions.assertThat(instrumentCategoryFoundById2).isEqualTo(instrumentCategoryEntity2);
         Assertions.assertThat(instrumentCategoryFoundById3).isEqualTo(instrumentCategoryEntity3);
     }
+    @Test
+    void findInstrumentCategoryByIdThrowsExceptionIfCategoriesDoesNotExists() {
+        //given
+        short nonExistingCategoryId = 15;
+        String exceptionMessage = "Instrument category with id number [%s] doesn't exist! Put 1, 2 or 3."
+                .formatted(nonExistingCategoryId);
+
+        //when
+        Mockito.when(instrumentCategoryRepository.findCategoryById(nonExistingCategoryId))
+                .thenReturn(Optional.empty());
+        Executable exception =
+                () -> instrumentCategoryService.findInstrumentCategoryById(nonExistingCategoryId);
+
+        //then
+        org.junit.jupiter.api.Assertions.assertThrowsExactly(
+                RuntimeException.class, exception, exceptionMessage);
+    }
 
     @Test
-    void findInstrumentCategoryByName() {
+    void findInstrumentCategoryByNameWorksCorrectly() {
         //given
         String instrumentCategoryStrunoweName = InstrumentCategoryName.strunowe.name();
         String instrumentCategoryDęteName = InstrumentCategoryName.dęte.name();
@@ -107,5 +143,23 @@ class InstrumentCategoryServiceTest {
         Assertions.assertThatCollection(allInstrumentCategories).contains(instrumentCategoryByName1);
         Assertions.assertThatCollection(allInstrumentCategories).contains(instrumentCategoryByName2);
         Assertions.assertThatCollection(allInstrumentCategories).contains(instrumentCategoryByName3);
+    }
+    @Test
+    void findInstrumentCategoryByNameThrowsExceptionIfCategoriesDoesNotExists() {
+        //given
+        String nonExistingCategoryName = "nonExistingCategoryName";
+        List<String> categoryNames = Arrays.stream(InstrumentCategoryName.values())
+                .map(Enum::name)
+                .toList();
+        String exceptionMessage = "Instrument category [%s] doesn't exist, sorry!%nAvailable categories: %s."
+                .formatted(nonExistingCategoryName, categoryNames);
+
+        //when
+        Executable exception =
+                () -> instrumentCategoryService.findInstrumentCategoryByName(nonExistingCategoryName);
+
+        //then
+        org.junit.jupiter.api.Assertions.assertThrowsExactly(
+                RuntimeException.class, exception, exceptionMessage);
     }
 }

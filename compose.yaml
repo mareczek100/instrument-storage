@@ -1,4 +1,4 @@
-version: '1.0'
+version: '3.7'
 services:
   postgres:
     image: 'postgres:latest'
@@ -7,7 +7,7 @@ services:
       - 'POSTGRES_PASSWORD=postgres'
       - 'POSTGRES_USER=postgres'
     ports:
-      - '8000:5432'
+      - '8002:5432'
     volumes:
       - db-data:/var/lib/postgresql/instrument_storage/data
     networks:
@@ -22,9 +22,9 @@ services:
     hostname: instrument-storage
     build: .
     ports:
-      - 8082:8082
+      - "9092:8082"
     expose:
-      - 8082
+      - 9092
     environment:
       - SPRING_PROFILES_ACTIVE=local
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/instrument_storage

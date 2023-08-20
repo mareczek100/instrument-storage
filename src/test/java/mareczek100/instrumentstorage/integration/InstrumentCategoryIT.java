@@ -34,7 +34,6 @@ public class InstrumentCategoryIT extends RestAssuredITConfig implements Instrum
 
     @Test
     void allInstrumentCategoryList(){
-
         //given
         InstrumentCategoryName strunowe = InstrumentCategoryName.strunowe;
         InstrumentCategoryName dęte = InstrumentCategoryName.dęte;

@@ -26,7 +26,7 @@ public class InstrumentCategoryRestController {
     private final InstrumentCategoryService instrumentCategoryService;
     private final InstrumentCategoryEntityDtoMapper instrumentCategoryEntityDtoMapper;
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument storage found all instrument category in our base!"))
-    @Operation(summary = "Find list of available instrument category.")
+    @Operation(summary = "Find list of available instrument categories.")
     @GetMapping
     public InstrumentCategoriesDto allInstrumentCategoryList() {
         return InstrumentCategoriesDto.builder().instrumentCategoryDtoList(
@@ -37,7 +37,7 @@ public class InstrumentCategoryRestController {
     }
 
     @ApiResponses(@ApiResponse(code = 200, message = "Instrument storage found instrument category by id!"))
-    @Operation(summary = "Find instrument category by name. Id is an integer between 1 and 3 - just main categories.")
+    @Operation(summary = "Find instrument category by id number. Id is an integer between 1 and 3 - just main categories.")
     @GetMapping(FIND_INSTRUMENT_CATEGORY_BY_ID)
     public InstrumentCategoryDto findInstrumentCategoryById(
             @PathVariable("instrumentCategoryId") Short instrumentCategoryId) {
