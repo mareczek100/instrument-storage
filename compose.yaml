@@ -1,7 +1,8 @@
-version: '3.7'
+version: '3.8'
 services:
   postgres:
     image: 'postgres:latest'
+    restart: always
     environment:
       - 'POSTGRES_DB=instrument_storage'
       - 'POSTGRES_PASSWORD=postgres'
@@ -11,32 +12,34 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/instrument_storage/data
     networks:
-      - spring-boot-postgres
+      - instrument-net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
-  instrumentstorage:
-    container_name: instrument-storage
-    hostname: instrument-storage
+  instrument_storage:
+    container_name: instrument_storage
+    hostname: instrument_storage
     build: .
+    restart: always
     ports:
       - "9092:8082"
     expose:
-      - 9092
+      - "9092"
     environment:
       - SPRING_PROFILES_ACTIVE=local
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/instrument_storage
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+    tty: true
     networks:
-      - spring-boot-postgres
+      - instrument-net
     depends_on:
       postgres:
         condition: service_healthy
 volumes:
   db-data:
 networks:
-  spring-boot-postgres:
+  instrument-net:
     name: music-net
